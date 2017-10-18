@@ -1,0 +1,5 @@
+c:\users\cassio\documents\visual studio 2015\Projects\Trabalho1\Trabalho1\bin\Debug\Trabalho1.exe.config
+C:\Users\cassio\documents\visual studio 2015\Projects\Trabalho1\Trabalho1\bin\Debug\Trabalho1.exe
+C:\Users\cassio\documents\visual studio 2015\Projects\Trabalho1\Trabalho1\bin\Debug\Trabalho1.pdb
+C:\Users\cassio\documents\visual studio 2015\Projects\Trabalho1\Trabalho1\obj\Debug\Trabalho1.exe
+C:\Users\cassio\documents\visual studio 2015\Projects\Trabalho1\Trabalho1\obj\Debug\Trabalho1.pdb
