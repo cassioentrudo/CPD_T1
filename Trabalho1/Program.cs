@@ -20,6 +20,9 @@ namespace Trabalho1
         public static void Main(string[] args)
         {
             LoadOriginalArray();
+
+            uint[] OrderedArray = new uint[SIZE];
+            InsertSort(OrderedArray);
         }
 
         /// <summary>
@@ -44,14 +47,34 @@ namespace Trabalho1
             }
             catch (EndOfStreamException)
             {
+                //Aqui acontece uma exception, mas é porque chegou no fim do arquivo
                 file.Close();
                 br.Close();
             }
         }
 
+        private static void InsertSort(params uint[] array)
+        {
+            array = originalArray;
+
+            for (int i = 1; i < SIZE; i++)
+            {
+                uint key = array[i];
+
+                int j = i - 1;
+
+                while ((j > 0)  && array[j] > key)
+                {
+                    array[j+1] = array[j];
+                }
+
+                array[j+1] = key;
+            }
+        }
+
         private static void SortArray()
         {
-
+            
         }
     }
 }
