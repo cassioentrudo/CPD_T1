@@ -128,5 +128,46 @@ namespace Trabalho1
 
             string output = "SheS, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).Milliseconds.ToString() + "ms";
         }
+        
+                /// <summary>
+        /// Ordena o vetor utilizando o algoritmo CombSort
+        /// </summary>
+        /// <param name="arrayType">Tipo de array: (o) Ordenado, (i) Inverso ou (r) Randômico</param>
+        ///    /// <param name="array">Array a ser ordenado</param>
+        /// <param name="size">Tamanho do array (sempre passo o array original com tamanho original, mas esse size que decide até que tamanho ele ordena</param>
+        private static void CombSort(string arrayType, uint[] array, uint size)
+        {
+            DateTime begin = DateTime.Now;
+            int swaps = 0;
+            int comparisons = 0;
+            uint gap = size;
+            bool swapped = true;
+
+            while (gap > 1 || swapped)
+            {
+                if (gap > 1)
+                {
+                    gap = (uint)(gap / 1.247330950103979);
+                }
+                uint i = 0;
+                swapped = false;
+                while (i + gap < size)
+                {
+                    comparisons++;
+                    if (array[i].CompareTo(array[i + gap]) > 0)
+                    {
+                        swaps++;
+                        uint t = array[i];
+                        array[i] = array[i + gap];
+                        array[i + gap] = t;
+                        swapped = true;
+                    }
+                    i++;
+                }
+            }
+
+            string output = "CbSt, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).Milliseconds.ToString() + "ms";
+
+        }
     }
 }
