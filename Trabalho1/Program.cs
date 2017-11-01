@@ -9,26 +9,28 @@ namespace Trabalho1
 {
     class Program
     {
-        /// <summary>
-        /// Tamanho do array
-        /// </summary>
-        private const int SIZE = 10000000;
-
-        //Array original do jeito que está
-        private static uint[] originalArray = new uint[SIZE];
+        private const int ORIGINAL_SIZE = 10000000;
 
         public static void Main(string[] args)
-        {
-            LoadOriginalArray();
+        {    
+            //Array A0 (Randômico)
+            uint[] A0 = new uint[ORIGINAL_SIZE];
 
-            uint[] OrderedArray = new uint[SIZE];
-            InsertSort(OrderedArray);
+            //Array A1 (Ordenado crescente)
+            uint[] A1 = new uint[ORIGINAL_SIZE];
+
+            LoadOriginalArray(A0);
+
+            A1 = A0;
+
+            //Usa ShellSorte para ordenar o array original que será utilizado nos teste.
+            ShellSort("r", ORIGINAL_SIZE, A1);
         }
 
         /// <summary>
         /// Carrega em memória o Array original.
         /// </summary>
-        private static void LoadOriginalArray()
+        private static void LoadOriginalArray(params uint[] array)
         {
             string fileName = "randomnumbers.bin";
             string filePath = Path.Combine(Environment.CurrentDirectory, fileName);
@@ -41,7 +43,7 @@ namespace Trabalho1
             {
                 while (true)
                 {
-                    originalArray[cont] = br.ReadUInt32();
+                    array[cont] = br.ReadUInt32();
                     cont++;
                 }
             }
@@ -53,28 +55,78 @@ namespace Trabalho1
             }
         }
 
-        private static void InsertSort(params uint[] array)
+        /// <summary>
+        /// Ordena o vetor utilizando o algoritmo InsertionSort
+        /// </summary>
+        /// <param name="arrayType">Tipo de array: (o) Ordenado, (i) Inverso ou (r) Randômico</param>
+        /// <param name="size">Tamanho do array (sempre passo o array original com tamanho original, mas esse size que decide até que tamanho ele ordena</param>
+        /// <param name="array">Array a ser ordenado</param>
+        private static void InsertSort(string arrayType, int size, params uint[] array)
         {
-            array = originalArray;
+            DateTime begin = DateTime.Now;
+            int swaps = 0;
+            int comparisons = 0;
 
-            for (int i = 1; i < SIZE; i++)
+            for (int i = 1; i < size; i++)
             {
                 uint key = array[i];
-
                 int j = i - 1;
 
-                while ((j > 0)  && array[j] > key)
+                comparisons++;
+
+                while ((j >= 0) && array[j] > key)
                 {
-                    array[j+1] = array[j];
+                    swaps++;
+                    array[j + 1] = array[j];
+                    j--;
                 }
 
-                array[j+1] = key;
+                array[j + 1] = key;
             }
+
+            string output = "ISBL, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).Milliseconds.ToString() + "ms";
         }
 
-        private static void SortArray()
+        /// <summary>
+        /// Ordena o vetor utilizando o algoritmo ShellSort
+        /// </summary>
+        /// <param name="arrayType">Tipo de array: (o) Ordenado, (i) Inverso ou (r) Randômico</param>
+        /// <param name="size">Tamanho do array (sempre passo o array original com tamanho original, mas esse size que decide até que tamanho ele ordena</param>
+        /// <param name="array">Array a ser ordenado</param>
+        private static void ShellSort(string arrayType, int size, params uint[] array)
         {
-            
+            DateTime begin = DateTime.Now;
+            int swaps = 0;
+            int comparisons = 0;
+            int i, j, value;
+            int gap = 1;
+
+            while (gap < size)
+            {
+                gap = 3 * gap + 1;
+            }
+
+            while (gap > 1)
+            {
+                gap /= 3;
+                for (i = gap; i < size; i++)
+                {
+                    value = (int)array[i];
+                    j = i - gap;
+
+                    comparisons++;
+                    while (j >= 0 && value < array[j])
+                    {
+                        swaps++;
+                        array[j + gap] = array[j];
+                        j -= gap;
+                    }
+
+                    array[j + gap] = (uint)value;
+                }
+            }
+
+            string output = "SheS, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).Milliseconds.ToString() + "ms";
         }
     }
 }
