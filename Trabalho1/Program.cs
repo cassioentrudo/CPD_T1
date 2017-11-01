@@ -128,5 +128,121 @@ namespace Trabalho1
 
             string output = "SheS, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).Milliseconds.ToString() + "ms";
         }
+        
+         /// <summary>
+        /// Ordena o vetor utilizando o algoritmo CombSort
+        /// </summary>
+        /// <param name="arrayType">Tipo de array: (o) Ordenado, (i) Inverso ou (r) Randômico</param>
+        ///    /// <param name="array">Array a ser ordenado</param>
+        /// <param name="size">Tamanho do array (sempre passo o array original com tamanho original, mas esse size que decide até que tamanho ele ordena</param>
+        private static void CombSort(string arrayType, uint[] array, uint size)
+        {
+            DateTime begin = DateTime.Now;
+            int swaps = 0;
+            int comparisons = 0;
+            uint gap = size;
+            bool swapped = true;
+
+            while (gap > 1 || swapped)
+            {
+                if (gap > 1)
+                {
+                    gap = (uint)(gap / 1.247330950103979);
+                }
+                uint i = 0;
+                swapped = false;
+                while (i + gap < size)
+                {
+                    comparisons++;
+                    if (array[i].CompareTo(array[i + gap]) > 0)
+                    {
+                        swaps++;
+                        uint t = array[i];
+                        array[i] = array[i + gap];
+                        array[i + gap] = t;
+                        swapped = true;
+                    }
+                    i++;
+                }
+            }
+
+            string output = "CbSt, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).Milliseconds.ToString() + "ms";
+            
+        }
+
+        /// <summary>
+        /// Ordena o vetor utilizando o algoritmo QuickSort. Calcula o tempo, trocas e comparacoes.
+        /// </summary>
+        /// <param name="arrayType">Tipo de array: (o) Ordenado, (i) Inverso ou (r) Randômico</param>
+        /// <param name="array">Array a ser ordenado</param>
+        /// <param name="size">Tamanho do array (sempre passo o array original com tamanho original, mas esse size que decide até que tamanho ele ordena</param>
+        private static void Quicksort(string arrayType, uint[] array, uint size)
+        {
+            DateTime begin = DateTime.Now;
+            int[] dados = new int[2];
+            dados[0] = 0; //swaps
+            dados[1] = 0; //comparisons
+
+            Quicksort2(dados, array, 0, size - 1);
+
+            int swaps = dados[0];
+            int comparisons = dados[1];
+
+            string output = "QukS, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).Milliseconds.ToString() + "ms";
+          
+        }
+
+        /// <summary>
+        /// Funcao auxiliar da QuickSort. Ordena o vetor utilizando o algoritmo QuickSort.
+        /// </summary>
+        /// <param name="dados">Array para guardar o numero de swaps(dados[0]) e comparisons(dados[1]). 
+        /// <param name="array">Array a ser ordenado.
+        /// <param name="primeiro">Primeira posicao do array. Normalmente zero.</param>
+        /// <param name="ultimo">Ultima posicao do array.
+        private static void Quicksort2(int[] dados, uint[] array, uint primeiro, uint ultimo)
+        {
+
+            uint baixo, alto, meio, pivo, repositorio;
+            baixo = primeiro; //i dos slides
+            alto = ultimo;    //j dos slides
+            meio = (uint)((baixo + alto) / 2);
+            dados[0]++;
+            dados[1]++;
+            pivo = array[meio];
+
+            while (baixo <= alto)
+            {
+                while (array[baixo] < pivo)
+                {
+                    baixo++;
+                    dados[1]++; //comparisons
+                }
+                while (array[alto] > pivo)
+                {
+                    alto--;
+                    dados[1]++; //comparisons
+                }
+                if (baixo < alto)
+                {
+                    repositorio = array[baixo];
+                    array[baixo++] = array[alto];
+                    array[alto--] = repositorio;
+                    dados[0]++; //swaps
+                }
+                else
+                {
+                    if (baixo == alto)
+                    {
+                        baixo++;
+                        alto--;
+                    }
+                }
+            }
+
+            if (alto > primeiro)
+                Quicksort2(dados, array, primeiro, alto);
+            if (baixo < ultimo)
+                Quicksort2(dados, array, baixo, ultimo);
+        }
     }
 }
