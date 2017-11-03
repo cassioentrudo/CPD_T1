@@ -84,7 +84,7 @@ namespace Trabalho1
                 array[j + 1] = key;
             }
 
-            string output = "ISBL, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).Milliseconds.ToString() + "ms";
+            string output = "ISBL, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).TotalMilliseconds.ToString() + "ms";
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace Trabalho1
                 }
             }
 
-            string output = "SheS, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).Milliseconds.ToString() + "ms";
+            string output = "SheS, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).TotalMilliseconds.ToString() + "ms";
         }
         
          /// <summary>
@@ -166,7 +166,7 @@ namespace Trabalho1
                 }
             }
 
-            string output = "CbSt, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).Milliseconds.ToString() + "ms";
+            string output = "CbSt, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).TotalMilliseconds.ToString() + "ms";
             
         }
 
@@ -188,7 +188,7 @@ namespace Trabalho1
             int swaps = dados[0];
             int comparisons = dados[1];
 
-            string output = "QukS, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).Milliseconds.ToString() + "ms";
+            string output = "QukS, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).TotalMilliseconds.ToString() + "ms";
           
         }
 
@@ -243,6 +243,87 @@ namespace Trabalho1
                 Quicksort2(dados, array, primeiro, alto);
             if (baixo < ultimo)
                 Quicksort2(dados, array, baixo, ultimo);
+        }
+
+        /// <summary>
+        /// Ordena usando o algoritmo MergeSort, calcula ao numero de comparacoes e trocas.
+        /// </summary>
+        /// <param name="dados">array para guardar o numero de trocas e caomparaçoes</param>
+        /// <param name="array">Array a ser ordenado</param>
+        /// <param name="low">Primeiro indice da parte a ser ordenada</param>
+        /// <param name="high">ultimo indice da parte a ser ordenada</param>
+        public static void MergeSort2(int[] dados, uint[] array, uint low, uint high)
+        {
+            if (low < high)
+            {
+                uint middle = (low / 2) + (high / 2);
+                MergeSort2(dados, array, low, middle);
+                MergeSort2(dados, array, middle + 1, high);
+                Merge(dados, array, low, middle, high);
+            }
+        }
+
+
+        /// <summary>
+        /// Funçao auxiliar do MergeSort que intercala.
+        /// </summary>
+        /// <param name="dados">array para guardar o numero de trocas e caomparaçoes</param>
+        /// <param name="array">Array a ser ordenado</param>
+        /// <param name="low">Primeiro indice da parte a ser ordenada</param>
+        /// <param name="middle">indice do meio da parte a ser oerdenada</param>
+        /// <param name="high">ultimo indice da parte a ser ordenada</param>
+        private static void Merge(int[] dados, uint[] array, uint low, uint middle, uint high)
+        {
+
+            uint left = low;
+            uint right = middle + 1;
+            uint[] tmp = new uint[(high - low) + 1];
+            uint tmpIndex = 0;
+
+            while ((left <= middle) && (right <= high))
+            {
+                dados[1]++; //cada if uma comparison.
+                if (array[left] < array[right])
+                    tmp[tmpIndex++] = array[left++];
+                else
+                {
+                    tmp[tmpIndex++] = array[right++];
+                    dados[0]++;  // se o da esquerda for maior q o da direita, swap.
+                }
+
+            }
+
+
+            while (left <= middle)
+                tmp[tmpIndex++] = array[left++];
+
+            while (right <= high)
+                tmp[tmpIndex++] = array[right++];
+
+
+            for (int i = 0; i < tmp.Length; i++)
+                array[low + i] = tmp[i];
+
+        }
+
+        /// <summary>
+        /// Funcao para chamar o MergeSort. Ordena o vetor utilizando o algoritmo MergeSort. Calcula o tempo, trocas e comparacoes.
+        /// </summary>
+        /// <param name="arrayType">Tipo de array: (o) Ordenado, (i) Inverso ou (r) Randômico</param>
+        /// <param name="array">Array a ser ordenado</param>
+        /// <param name="size">Tamanho do array (sempre passo o array original com tamanho original, mas esse size que decide até que tamanho ele ordena</param>
+        static private void MergeSort(string arrayType, uint[] array, uint size)
+        {
+            DateTime begin = DateTime.Now;
+            int[] dados = new int[2];
+            dados[0] = 0; //swaps
+            dados[1] = 0; //comparisons
+            MergeSort2(dados, array, 0, size - 1);
+            int swaps = dados[0];
+            int comparisons = dados[1];
+
+            string output = "MerS, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).TotalMilliseconds.ToString() + "ms";
+
         }
     }
 }

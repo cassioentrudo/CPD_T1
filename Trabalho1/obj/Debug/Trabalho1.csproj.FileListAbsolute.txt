@@ -9,3 +9,10 @@ C:\Users\cassio\Documents\GitHub\CPD_T1\Trabalho1\obj\Debug\Trabalho1.pdb
 C:\Users\cassio\Documents\GitHub\CPD_T1\Trabalho1\bin\Debug\Trabalho1.exe
 C:\Users\cassio\Documents\GitHub\CPD_T1\Trabalho1\bin\Debug\Trabalho1.pdb
 C:\Users\cassio\Documents\GitHub\CPD_T1\Trabalho1\obj\Debug\Trabalho1.csprojResolveAssemblyReference.cache
+C:\Users\Felipe\Documents\GitHub\Nova pasta\CPD_T1\Trabalho1\bin\Debug\Trabalho1.exe.config
+C:\Users\Felipe\Documents\GitHub\Nova pasta\CPD_T1\Trabalho1\bin\Debug\Trabalho1.exe
+C:\Users\Felipe\Documents\GitHub\Nova pasta\CPD_T1\Trabalho1\bin\Debug\Trabalho1.pdb
+C:\Users\Felipe\Documents\GitHub\Nova pasta\CPD_T1\Trabalho1\obj\Debug\Trabalho1.csprojResolveAssemblyReference.cache
+C:\Users\Felipe\Documents\GitHub\Nova pasta\CPD_T1\Trabalho1\obj\Debug\Trabalho1.csproj.CoreCompileInputs.cache
+C:\Users\Felipe\Documents\GitHub\Nova pasta\CPD_T1\Trabalho1\obj\Debug\Trabalho1.exe
+C:\Users\Felipe\Documents\GitHub\Nova pasta\CPD_T1\Trabalho1\obj\Debug\Trabalho1.pdb
