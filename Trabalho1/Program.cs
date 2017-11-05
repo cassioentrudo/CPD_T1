@@ -485,5 +485,104 @@ namespace Trabalho1
         }
 
         #endregion
+            
+         /// <summary>
+        /// Funcao para chamar a Pesquisa Binaria. Calcula o tempo, trocas e comparacoes.
+        /// </summary>
+        /// <param name="chave">Numero a ser encontrado</param>
+        /// <param name="array">Array a ser pesquisado</param>
+        /// <param name="size">Tamanho do array</param>
+        private static void PesquisaBinaria(int chave, uint[] array, int size)
+        {
+            DateTime begin = DateTime.Now;
+            int[] dados = new int[2];
+            dados[0] = 0; // swaps
+            dados[1] = 0; // comparisons
+
+            
+            PesquisaBinaria2(dados, chave, array, 0, size - 1);
+
+            int swaps = dados[0];
+            int comparisons = dados[1];
+
+            string output = "Bbin, " + "o, " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).TotalMilliseconds.ToString() + "ms";
+            
+        }
+
+
+        /// <summary>
+        /// Pesquisa uma chave em um array, devolve -1 se nao encontrado e o indice se encontrado.
+        /// </summary>
+        /// <param name="dados">array para calcular o numero de trocas e comparacoes</param>
+        /// <param name="chave">Numero a ser encontrado</param>
+        /// <param name="array">Array a ser pesquisado</param>
+        /// <param name="left">valor mais a esquerda do segmento para ser pesquisado</param>
+        /// <param name="right">valor mais a direita do segmento para ser pesquisado</param>
+        private static int PesquisaBinaria2(int[] dados, int chave, uint[] array, int left, int right)
+        {
+            int meio = (left + right) / 2;
+            dados[1]++;
+            if (array[meio] == chave)
+                return meio;
+
+            if (left >= right)
+                return -1; // não encontrado
+            else
+            {
+                dados[1]++;
+                if (array[meio] < chave)
+                    return PesquisaBinaria2(dados, chave, array, meio + 1, right);
+                else
+                    return PesquisaBinaria2(dados, chave, array, left, meio - 1);
+            }
+
+        }
+
+        /// <summary>
+        /// Funcao para chamar a Pesquisa Linear. Calcula o tempo, trocas e comparacoes.
+        /// </summary>
+        /// <param name="array">array a ser pesuisado</param>
+        /// <param name="size">tamanho do array</param>
+        /// <param name="chave">Chave a ser encontrada</param>
+        private static void PesquisaLinear(uint[] array, int size, int chave)
+        {
+            DateTime begin = DateTime.Now;
+            int[] dados = new int[2];
+            dados[0] = 0; // swaps
+            dados[1] = 0; // comparisons
+
+
+            PesquisaLinear2(dados, array, chave, size);
+
+            int swaps = dados[0];
+            int comparisons = dados[1];
+
+            string output = "BLin, " + "o, " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).TotalMilliseconds.ToString() + "ms";
+            Console.WriteLine(output);
+        }
+
+
+        /// <summary>
+        /// Pesquisa uma chave em um array, devolve -1 se nao encontrado e o indice se encontrado.
+        /// </summary>
+        /// <param name="dados">array para calcular o numero de trocas e comparacoes</param>
+        /// <param name="array">array a ser pesquisado</param>
+        /// <param name="size">tamanho do array</param>
+        /// <param name="chave">chave a ser enzontrada</param>
+        private static int PesquisaLinear2(int[] dados, uint[] array, int size, int chave)
+        {
+         
+
+            for (int i = 0; i < size; i++)
+            {
+                dados[1]++;
+                if (array[i] == chave)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
     }
 }
