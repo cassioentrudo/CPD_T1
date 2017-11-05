@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Trabalho1
 {
@@ -12,19 +8,58 @@ namespace Trabalho1
         private const int ORIGINAL_SIZE = 10000000;
 
         public static void Main(string[] args)
-        {    
+        {
             //Array A0 (Randômico)
             uint[] A0 = new uint[ORIGINAL_SIZE];
 
             //Array A1 (Ordenado crescente)
             uint[] A1 = new uint[ORIGINAL_SIZE];
 
-            LoadOriginalArray(A0);
+            //Array A2 (Ordenado decrescente)
+            uint[] A2 = new uint[ORIGINAL_SIZE];
 
-            A1 = A0;
+            LoadOriginalArray(A0); //Carrega array do arquivo (randômico)
 
-            //Usa ShellSorte para ordenar o array original que será utilizado nos teste.
-            ShellSort("r", ORIGINAL_SIZE, A1);
+            A1 = SetA1(A0); //Monta A1 de forma ordenada crescente
+            A2 = SetA2(A1); //Monta A2 de forma decrescente
+
+            //Para o array A0
+            //InsertSort("R", 1000, (uint[])A0.Clone());
+            //ShellSort("R", 1000, (uint[])A0.Clone(), true);
+            //CombSort("R", (uint[])A0.Clone(), 1000);
+            ////Quicksort("R", (uint[])A0.Clone(), 1000);
+            //SelectionSort("R", 1000, (uint[])A0.Clone());
+            //Heapsort("R", 1000, (uint[])A0.Clone());
+            //MergeSort("R", (uint[])A0.Clone(), 1000);
+
+            //Para o array A1
+            InsertSort("O", 1000, (uint[])A1.Clone());
+            ShellSort("O", 1000, (uint[])A1.Clone(), true);
+        }
+
+        #region Métodos para carregar array do arquivo, criação das versões ordenadas crescente e decrescente e escrita de resultados
+
+        /// <summary>
+        /// Configura A1 de forma crescente
+        /// </summary>
+        private static uint[] SetA1(uint[] array)
+        {
+            uint[] newArray = (uint[])array.Clone();
+            ShellSort("r", ORIGINAL_SIZE, (newArray), false);
+
+            return newArray;
+        }
+
+        /// <summary>
+        /// Configura A2 de forma decrescente
+        /// </summary>
+        private static uint[] SetA2(uint[] array)
+        {
+            uint[] newArray = (uint[])array.Clone();
+
+            Array.Reverse(newArray);
+
+            return newArray;
         }
 
         /// <summary>
@@ -55,13 +90,37 @@ namespace Trabalho1
             }
         }
 
+        private static void WriteFile(string line)
+        {
+            string fileName = "R00252847.txt";
+            string filePath = Path.Combine(Environment.CurrentDirectory, fileName);
+
+            try
+            {
+                FileStream file = File.Open(filePath, FileMode.Append, FileAccess.Write);
+                StreamWriter sw = new StreamWriter(file);
+
+                sw.WriteLine(line);
+
+                sw.Flush();
+                sw.Close();
+            }
+            catch (Exception)
+            {
+                //TODO
+            }
+        }
+
+        #endregion
+
+        #region Algoritmos de Inserção
         /// <summary>
         /// Ordena o vetor utilizando o algoritmo InsertionSort
         /// </summary>
         /// <param name="arrayType">Tipo de array: (o) Ordenado, (i) Inverso ou (r) Randômico</param>
         /// <param name="size">Tamanho do array (sempre passo o array original com tamanho original, mas esse size que decide até que tamanho ele ordena</param>
         /// <param name="array">Array a ser ordenado</param>
-        private static void InsertSort(string arrayType, int size, params uint[] array)
+        private static void InsertSort(string arrayType, int size, uint[] array)
         {
             DateTime begin = DateTime.Now;
             int swaps = 0;
@@ -85,6 +144,7 @@ namespace Trabalho1
             }
 
             string output = "ISBL, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).TotalMilliseconds.ToString() + "ms";
+            WriteFile(output);
         }
 
         /// <summary>
@@ -93,7 +153,7 @@ namespace Trabalho1
         /// <param name="arrayType">Tipo de array: (o) Ordenado, (i) Inverso ou (r) Randômico</param>
         /// <param name="size">Tamanho do array (sempre passo o array original com tamanho original, mas esse size que decide até que tamanho ele ordena</param>
         /// <param name="array">Array a ser ordenado</param>
-        private static void ShellSort(string arrayType, int size, params uint[] array)
+        private static void ShellSort(string arrayType, int size, uint[] array, bool writeFile)
         {
             DateTime begin = DateTime.Now;
             int swaps = 0;
@@ -126,10 +186,18 @@ namespace Trabalho1
                 }
             }
 
-            string output = "SheS, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).TotalMilliseconds.ToString() + "ms";
+            if (writeFile)
+            {
+                string output = "SheS, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).TotalMilliseconds.ToString() + "ms";
+                WriteFile(output);
+            }           
         }
-        
-         /// <summary>
+
+        #endregion
+
+        #region Algoritmos de Trocas
+
+        /// <summary>
         /// Ordena o vetor utilizando o algoritmo CombSort
         /// </summary>
         /// <param name="arrayType">Tipo de array: (o) Ordenado, (i) Inverso ou (r) Randômico</param>
@@ -167,8 +235,9 @@ namespace Trabalho1
             }
 
             string output = "CbSt, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).TotalMilliseconds.ToString() + "ms";
-            
+            WriteFile(output);
         }
+
 
         /// <summary>
         /// Ordena o vetor utilizando o algoritmo QuickSort. Calcula o tempo, trocas e comparacoes.
@@ -189,7 +258,8 @@ namespace Trabalho1
             int comparisons = dados[1];
 
             string output = "QukS, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).TotalMilliseconds.ToString() + "ms";
-          
+            WriteFile(output);
+
         }
 
         /// <summary>
@@ -201,7 +271,6 @@ namespace Trabalho1
         /// <param name="ultimo">Ultima posicao do array.
         private static void Quicksort2(int[] dados, uint[] array, uint primeiro, uint ultimo)
         {
-
             uint baixo, alto, meio, pivo, repositorio;
             baixo = primeiro; //i dos slides
             alto = ultimo;    //j dos slides
@@ -245,6 +314,99 @@ namespace Trabalho1
                 Quicksort2(dados, array, baixo, ultimo);
         }
 
+        #endregion
+
+        #region Algoritmos de Seleção
+
+        private static void SelectionSort(string arrayType, int size, uint[] array)
+        {
+            int swaps = 0;
+            int comparisons = 0;
+
+            DateTime begin = DateTime.Now;
+
+            for (int indice = 0; indice < size; ++indice)
+            {
+                comparisons++;
+                int indiceMenor = indice;
+
+                for (int indiceSeguinte = indice + 1; indiceSeguinte < size; ++indiceSeguinte)
+                {
+                    if (array[indiceSeguinte] < array[indiceMenor])
+                    {
+                        indiceMenor = indiceSeguinte;
+                    }
+                }
+
+                swaps++;
+                uint aux = array[indice];
+                array[indice] = array[indiceMenor];
+                array[indiceMenor] = aux;
+            }
+
+            string output = "SelS, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).TotalMilliseconds.ToString() + "ms";
+            WriteFile(output);
+        }
+
+        private static void Heapsort(string arrayType, int size, uint[] array)
+        {
+            int n = size;
+            int i = n / 2, pai, filho;
+            uint t;
+            int swaps = 0;
+            int comparisons = 0;
+
+            DateTime begin = DateTime.Now;
+
+            while (true)
+            {
+                comparisons++;
+
+                if (i > 0)
+                {
+                    i--;
+                    t = array[i];
+                }
+                else
+                {
+                    n--;
+                    if (n == 0) return;
+                    t = array[n];
+                    array[n] = array[0];
+                }
+
+                pai = i;
+                filho = i * 2 + 1;
+
+                while (filho < n)
+                {
+                    if ((filho + 1 < n) && (array[filho + 1] > array[filho]))
+                        filho++;
+
+                    if (array[filho] > t)
+                    {
+                        swaps++;
+                        array[pai] = array[filho];
+                        pai = filho;
+                        filho = pai * 2 + 1;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                array[pai] = t;
+            }
+
+            string output = "HepS, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).TotalMilliseconds.ToString() + "ms";
+            WriteFile(output);
+        }
+
+        #endregion
+
+        #region Algoritmos de Intercalação
+
         /// <summary>
         /// Ordena usando o algoritmo MergeSort, calcula ao numero de comparacoes e trocas.
         /// </summary>
@@ -263,7 +425,6 @@ namespace Trabalho1
             }
         }
 
-
         /// <summary>
         /// Funçao auxiliar do MergeSort que intercala.
         /// </summary>
@@ -274,7 +435,6 @@ namespace Trabalho1
         /// <param name="high">ultimo indice da parte a ser ordenada</param>
         private static void Merge(int[] dados, uint[] array, uint low, uint middle, uint high)
         {
-
             uint left = low;
             uint right = middle + 1;
             uint[] tmp = new uint[(high - low) + 1];
@@ -293,7 +453,6 @@ namespace Trabalho1
 
             }
 
-
             while (left <= middle)
                 tmp[tmpIndex++] = array[left++];
 
@@ -303,7 +462,6 @@ namespace Trabalho1
 
             for (int i = 0; i < tmp.Length; i++)
                 array[low + i] = tmp[i];
-
         }
 
         /// <summary>
@@ -323,7 +481,9 @@ namespace Trabalho1
             int comparisons = dados[1];
 
             string output = "MerS, " + arrayType + ", " + size.ToString() + ", " + swaps + ", " + comparisons + ", " + (DateTime.Now.Subtract(begin)).TotalMilliseconds.ToString() + "ms";
-
+            WriteFile(output);
         }
+
+        #endregion
     }
 }
